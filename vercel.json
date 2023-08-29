@@ -7,12 +7,12 @@
     ],
     "routes": [
       {
-        "source": "/articles/(.*)",
-        "destination": "/articles/$1"
+        "src": "/articles/(.*)",
+        "dest": "/articles/$1"
       },
       {
-        "source": "/authentication/(.*)",
-        "destination": "/authentication/$1"
+        "src": "/authentication/(.*)",
+        "dest": "/authentication/$1"
       },
       {
         "src": "/(.*)",
