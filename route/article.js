@@ -2,6 +2,7 @@ import express from 'express';
 import asyncWrapper from '../utils/async-wrapper.js';
 import BlogPost from '../models/Post.js';
 import Subscription from '../models/Susbscription.js';
+import Comment from '../models/Comment.js';
 
 const router = express.Router( );
 
