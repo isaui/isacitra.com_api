@@ -69,7 +69,7 @@ db.once("open", ()=>{
     console.log('Mongo database connected')
 } )
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const corsOptions = {
     origin:'https://isacitra.com'
 }
