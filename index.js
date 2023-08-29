@@ -30,7 +30,7 @@ db.once("open", ()=>{
 const app = express();
 const PORT = 3001;
 const corsOptions = {
-    origin:'https://isacitra-com.vercel.app'
+    origin:'https://isacitra.com'
 }
 const sessionConfig = {
   secret: 'sipalingambisius',
