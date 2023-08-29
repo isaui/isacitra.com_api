@@ -10,6 +10,8 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
+import Comment from './models/Comment.js';
+
 
 
 
