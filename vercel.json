@@ -19,39 +19,15 @@
     "routes": [
       {
         "src": "/articles/(.*)",
-        "dest": "/articles/$1",
-        "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "OPTIONS",
-        "DELETE"
-      ]
+        "dest": "/articles/$1"
       },
       {
         "src": "/authentication/(.*)",
-        "dest": "/authentication/$1",
-        "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "OPTIONS",
-        "DELETE"
-      ]
+        "dest": "/authentication/$1"
       },
       {
         "src": "/(.*)",
-        "dest": "index.js",
-        "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "PATCH",
-        "OPTIONS",
-        "DELETE"
-      ]
+        "dest": "index.js"
       }
     ]
   }
