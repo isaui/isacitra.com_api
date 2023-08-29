@@ -10,7 +10,7 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
-import Comment from './models/Comment.js';
+//import Comment from './models/Comment.js';
 
 const allowCors = fn => async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true)
@@ -71,7 +71,7 @@ const sessionConfig = {
 const resetAll = async () => {
   await User.deleteMany({})
 }
-app.use(cors());
+app.use(cors(corsOptions));
 //app.use(allowCors(handler));
 app.use(express.json());
 app.use(session(sessionConfig));
