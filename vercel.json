@@ -11,7 +11,7 @@
         "dest": "/articles/$1",
           "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
       "headers": {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "https://isacitra.com"
       }
       },
       {
@@ -19,7 +19,7 @@
         "dest": "/authentication/$1",
           "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
       "headers": {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "https://isacitra.com"
       }
       },
       {
@@ -27,7 +27,7 @@
         "dest": "index.js",
           "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
       "headers": {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "https://isacitra.com"
       }
       }
     ]
