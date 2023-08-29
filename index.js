@@ -49,7 +49,7 @@ const sessionConfig = {
 const resetAll = async () => {
   await User.deleteMany({})
 }
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(session(sessionConfig));
 app.use(flash());
