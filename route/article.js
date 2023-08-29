@@ -3,7 +3,7 @@ import asyncWrapper from '../utils/async-wrapper.js';
 import BlogPost from '../models/Post.js';
 import Subscription from '../models/Susbscription.js';
 
-const router = express.Router({mergeParams:true});
+const router = express.Router();
 
 router.post('/', asyncWrapper(async (req, res) => {
     try {
@@ -123,10 +123,4 @@ router.post('/', asyncWrapper(async (req, res) => {
       const relatedArticles = await BlogPost.find({categories:{$in:filteredCategories}, _id: { $ne: post._id }}).limit(5).populate('author');
       res.send({post, relatedArticles });
   }))
-
-
-
-
-  
-
   export default router
