@@ -8,15 +8,39 @@
     "routes": [
       {
         "src": "/articles/(.*)",
-        "dest": "/articles/$1"
+        "dest": "/articles/$1",
+        "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "OPTIONS",
+        "DELETE"
+      ]
       },
       {
         "src": "/authentication/(.*)",
-        "dest": "/authentication/$1"
+        "dest": "/authentication/$1",
+        "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "OPTIONS",
+        "DELETE"
+      ]
       },
       {
         "src": "/(.*)",
-        "dest": "index.js"
+        "dest": "index.js",
+        "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "OPTIONS",
+        "DELETE"
+      ]
       }
     ]
   }
