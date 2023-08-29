@@ -13,7 +13,7 @@
     "session": "^0.1.0"
   },
   "scripts": {
-    "start": "node index.js", // Atur ini sesuai dengan file yang menjalankan aplikasi Anda
+    "start": "node index.js", 
     "dev": "nodemon index.js"
   }
 }
