@@ -34,6 +34,23 @@ const handler = (req, res) => {
   res.end(d.toString())
 }
 
+const allowCors2 = (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Ganti '*' dengan domain yang sesuai jika diperlukan
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  next(); // Lanjutkan ke middleware atau handler selanjutnya
+};
+
 
 
 
@@ -73,6 +90,7 @@ const resetAll = async () => {
 }
 app.use(cors());
 //app.use(allowCors(handler));
+app.use(allowCors2);
 app.use(express.json());
 app.use(session(sessionConfig));
 app.use(flash());
