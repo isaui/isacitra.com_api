@@ -2,7 +2,7 @@ import express from 'express';
 import asyncWrapper from '../utils/async-wrapper.js';
 import BlogPost from '../models/Post.js';
 import Subscription from '../models/Susbscription.js';
-import Comment from '../models/Comment.js';
+//import Comment from '../models/Comment.js';
 
 const router = express.Router( );
 
@@ -42,13 +42,13 @@ router.post('/', asyncWrapper(async (req, res) => {
   }))
 
   router.get('/', asyncWrapper(async (req,res)=> {
-    const articles = await BlogPost.find({}).populate('author').populate('comments')
+    const articles = await BlogPost.find({}).populate('author')
     res.send({articles})
   }))
   router.post('/edit', asyncWrapper(async (req,res)=> {
     const {user} = req.body;
     
-    const articles = await BlogPost.find({author:user._id}).populate('author').populate('comments')
+    const articles = await BlogPost.find({author:user._id}).populate('author')
     res.send({articles})
   }))
 
@@ -112,7 +112,7 @@ router.post('/', asyncWrapper(async (req, res) => {
       const {id} = req.params;
       var post;
       try {
-        post = await BlogPost.findById(id).populate('author').populate('comments');
+        post = await BlogPost.findById(id).populate('author');
         post.incrementViews();
       } catch (error) {
         next(error)
