@@ -90,7 +90,7 @@ const resetAll = async () => {
 }
 app.use(cors());
 //app.use(allowCors(handler));
-app.use(allowCors2);
+//app.use(allowCors2);
 app.use(express.json());
 app.use(session(sessionConfig));
 app.use(flash());
