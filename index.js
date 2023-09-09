@@ -10,6 +10,8 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
+import MataKuliah from './models/Material.js';
+import MataKuliahRoute from './route/matakuliah.js';
 //import Comment from './models/Comment.js';
 
 const allowCors = fn => async (req, res) => {
@@ -112,7 +114,7 @@ app.use((req, res, next) => {
 
 app.use('/authentication', AuthenticationRoute);
 app.use('/articles', ArticleRoute);
-
+app.use('/learn', MataKuliahRoute)
 
 
 
