@@ -20,7 +20,7 @@ router.post('/', asyncWrapper(async (req,res)=>{
 
 router.get('/', async (req, res) => {
     try {
-      const mataKuliahList = await MataKuliah.find().populate('chapters'); // Mengambil semua data mata kuliah dari database
+      const mataKuliahList = await MataKuliah.find().populate('chapters').populate('author'); // Mengambil semua data mata kuliah dari database
       res.json(mataKuliahList); // Mengirim daftar mata kuliah sebagai respons JSON
     } catch (error) {
       res.status(500).json({ message: "Terjadi kesalahan dalam server" }); // Menangani kesalahan jika terjadi
