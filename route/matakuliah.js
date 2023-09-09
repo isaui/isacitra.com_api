@@ -1,7 +1,7 @@
 import express from 'express';
 import asyncWrapper from '../utils/async-wrapper.js';
 const router = express.Router( );
-import MataKuliah from '../models/Material.js';
+import {MataKuliah, Chapter} from '../models/Material.js';
 
 router.post('/', asyncWrapper(async (req,res)=>{
     const data = req.body;
@@ -16,6 +16,23 @@ router.post('/', asyncWrapper(async (req,res)=>{
     } catch (error) {
         return res.status(500).json({error:error, message:error.message??"Terjadi kesalahan dalam server"})
     }
+}))
+
+router.post('/addSection/:id', asyncWrapper(async (req,res)=>{
+  const {id} = req.params;
+  const newChapterData = req.body;
+  const NewChapter = new Chapter({...newChapterData})
+  try {
+      const matkul = await  MataKuliah.findById(id);
+  if(!matkul){
+      return res.status(400).json({message:"Mata Kuliah Tidak Ada atau Telah Dihapus"})
+  }
+  matkul.chapters.push(NewChapter)// todo
+  await matkul.save();
+  return res.json(NewChapter);
+  } catch (error) {
+      return res.status(500).json({error:error, message:error.message??"Terjadi kesalahan dalam server"})
+  }
 }))
 
 router.get('/', async (req, res) => {

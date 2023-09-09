@@ -94,4 +94,5 @@ const MataKuliahSchema = new mongoose.Schema({
 });
 
 const MataKuliah = mongoose.model("Matkul", MataKuliahSchema);
-export default MataKuliah;
+const Chapter = mongoose.model("Chapter", chapterSchema)
+export {MataKuliah, Chapter};
