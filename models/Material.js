@@ -77,6 +77,10 @@ const MataKuliahSchema = new mongoose.Schema({
         type:String,
         required:true
     }],
+    thumbnail:{
+        type:String,
+        default:""
+    },
     createdAt:{
         type:Date,
         default:Date.now
