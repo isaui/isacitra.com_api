@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 
 
 
@@ -52,6 +52,7 @@ const materiSchema = new mongoose.Schema({
 
 })
 const chapterSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     title:{
         type:String,
         required:true
@@ -65,6 +66,7 @@ const chapterSchema = new mongoose.Schema({
     ]
 });
 const MataKuliahSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     title:{
         type:String,
         required:true
