@@ -24,22 +24,57 @@ const videoSchema = new mongoose.Schema({
 });
 
 const noteSchema = new mongoose.Schema({
-    _id:mongoose.Schema.Types.ObjectId,
-    title: {
-        type:String,
-        required:true
+    thumbnail: {
+      type: String,
+      default: ''
     },
-    content:{
-        type:String,
-        required:true
+    title: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    tableOfContents:{
+      type: String,
+      default: JSON.stringify([])
     },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
+    categories: [{
+      type: String
+    }],
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+      }],
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    lastModified: {
+      type: Date,
+      default: Date.now,
+    },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    likes: [{
+      type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
+    dislikes: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }],
+  
 
-})
+  })
 const materiSchema = new mongoose.Schema({
     _id:mongoose.Schema.Types.ObjectId,
     title:{
