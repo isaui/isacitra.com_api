@@ -66,7 +66,10 @@ router.get('/', async (req, res) => {
   router.get('/:id', async (req, res) => {
     try {
       const {id} = req.params;
-      const mataKuliah = await MataKuliah.findById(id).populate('author').populate('chapters'); // Mengambil semua data mata kuliah dari database
+      const mataKuliah = await MataKuliah.findById(id).populate('author').populate('chapters').populate({
+        path: 'chapters.materi.notes.author',
+        model: 'User' // Ganti 'User' dengan nama model yang sesuai
+    }); // Mengambil semua data mata kuliah dari database
       res.json(mataKuliah); // Mengirim daftar mata kuliah sebagai respons JSON
     } catch (error) {
       res.status(500).json({ message: "Terjadi kesalahan dalam server" }); // Menangani kesalahan jika terjadi
