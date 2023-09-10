@@ -42,7 +42,10 @@ router.post('/edit/:id', asyncWrapper(async (req,res)=>{
       const matkul = await  MataKuliah.findByIdAndUpdate(id, { $set: matkulData }, {new:true}).populate('author').populate('chapters').populate({
         path: 'chapters.materi.notes.author',
         model: 'User' // Ganti 'User' dengan nama model yang sesuai
-    });
+    }).populate({
+      path: 'chapters.materi.videos.author',
+      model: 'User' // Ganti 'User' dengan nama model yang sesuai
+  });
   if(!matkul){
       return res.status(400).json({message:"Mata Kuliah Tidak Ada atau Telah Dihapus"})
   }
@@ -69,7 +72,10 @@ router.get('/', async (req, res) => {
       const mataKuliah = await MataKuliah.findById(id).populate('author').populate('chapters').populate({
         path: 'chapters.materi.notes.author',
         model: 'User' // Ganti 'User' dengan nama model yang sesuai
-    }); // Mengambil semua data mata kuliah dari database
+    }).populate({
+      path: 'chapters.materi.videos.author',
+      model: 'User' // Ganti 'User' dengan nama model yang sesuai
+  }); // Mengambil semua data mata kuliah dari database
       res.json(mataKuliah); // Mengirim daftar mata kuliah sebagai respons JSON
     } catch (error) {
       res.status(500).json({ message: "Terjadi kesalahan dalam server" }); // Menangani kesalahan jika terjadi
