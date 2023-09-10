@@ -24,6 +24,7 @@ const videoSchema = new mongoose.Schema({
 });
 
 const noteSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     thumbnail: {
       type: String,
       default: ''
@@ -36,10 +37,6 @@ const noteSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    tableOfContents:{
-      type: String,
-      default: JSON.stringify([])
-    },
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -48,10 +45,6 @@ const noteSchema = new mongoose.Schema({
     categories: [{
       type: String
     }],
-    comments: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment',
-      }],
     createdAt: {
       type: Date,
       default: Date.now,
@@ -60,18 +53,6 @@ const noteSchema = new mongoose.Schema({
       type: Date,
       default: Date.now,
     },
-    views: {
-      type: Number,
-      default: 0,
-    },
-    likes: [{
-      type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-    }],
-    dislikes: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    }],
   
 
   })
