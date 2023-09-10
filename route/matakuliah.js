@@ -39,7 +39,10 @@ router.post('/edit/:id', asyncWrapper(async (req,res)=>{
   const {id} = req.params;
   const matkulData = req.body;
   try {
-      const matkul = await  MataKuliah.findByIdAndUpdate(id, { $set: matkulData }, {new:true}).populate('author').populate('chapters');
+      const matkul = await  MataKuliah.findByIdAndUpdate(id, { $set: matkulData }, {new:true}).populate('author').populate('chapters').populate({
+        path: 'chapters.materi.notes.author',
+        model: 'User' // Ganti 'User' dengan nama model yang sesuai
+    });
   if(!matkul){
       return res.status(400).json({message:"Mata Kuliah Tidak Ada atau Telah Dihapus"})
   }
