@@ -3,6 +3,7 @@ import mongoose, { Mongoose } from 'mongoose';
 
 
 const videoSchema = new mongoose.Schema({
+    _id:mongoose.Schema.Types.ObjectId,
     title: {
         type:String,
         required:true
@@ -23,6 +24,7 @@ const videoSchema = new mongoose.Schema({
 });
 
 const noteSchema = new mongoose.Schema({
+    _id:mongoose.Schema.Types.ObjectId,
     title: {
         type:String,
         required:true
@@ -39,6 +41,7 @@ const noteSchema = new mongoose.Schema({
 
 })
 const materiSchema = new mongoose.Schema({
+    _id:mongoose.Schema.Types.ObjectId,
     title:{
         type:String,
         required:true
