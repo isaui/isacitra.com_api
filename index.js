@@ -8,7 +8,7 @@ import ArticleRoute from './route/article.js';
 import AuthenticationRoute from './route/authentication.js';
 import session from 'express-session';
 import flash from 'connect-flash';
-import socketIo from 'socket.io';
+import {Server} from 'socket.io';
 import http from 'http';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
@@ -46,7 +46,7 @@ const sessionConfig = {
   }
 }
 
-const io = socketIo(server, {
+const io = new Server(server, {
   cors: {
 
   }
