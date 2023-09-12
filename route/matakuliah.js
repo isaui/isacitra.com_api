@@ -2,6 +2,7 @@ import express from 'express';
 import asyncWrapper from '../utils/async-wrapper.js';
 const router = express.Router( );
 import {MataKuliah, Chapter} from '../models/Material.js';
+import { io } from '../index.js';
 
 router.post('/', asyncWrapper(async (req,res)=>{
     const data = req.body;
@@ -50,7 +51,7 @@ router.post('/edit/:id', asyncWrapper(async (req,res)=>{
       return res.status(400).json({message:"Mata Kuliah Tidak Ada atau Telah Dihapus"})
   }
   // todo: perbarui data matkul dengan matkuldata
-  
+  io.emit('update-matkul', matkul);
   return res.json(matkul);
   } catch (error) {
       return res.status(500).json({error:error, message:error.message??"Terjadi kesalahan dalam server"})

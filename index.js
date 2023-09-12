@@ -8,53 +8,12 @@ import ArticleRoute from './route/article.js';
 import AuthenticationRoute from './route/authentication.js';
 import session from 'express-session';
 import flash from 'connect-flash';
+import socketIo from 'socket.io';
+import http from 'http';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import {MataKuliah, Chapter} from './models/Material.js';
 import MataKuliahRoute from './route/matakuliah.js';
-//import Comment from './models/Comment.js';
-
-const allowCors = fn => async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  // another common pattern
-  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
-  if (req.method === 'OPTIONS') {
-    res.status(200).end()
-    return
-  }
-  return await fn(req, res)
-}
-
-const handler = (req, res) => {
-  const d = new Date()
-  res.end(d.toString())
-}
-
-const allowCors2 = (req, res, next) => {
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Ganti '*' dengan domain yang sesuai jika diperlukan
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-
-  next(); // Lanjutkan ke middleware atau handler selanjutnya
-};
-
-
-
 
 const url = "mongodb://localhost:27017/isacitraweb"
 const atlasUrl = "mongodb+srv://isacitra:ENLkYSN2evCAab5D@isacitraweb.batvch9.mongodb.net/?retryWrites=true&w=majority";
@@ -71,10 +30,11 @@ db.once("open", ()=>{
     console.log('Mongo database connected')
 } )
 const app = express();
+const server = http.createServer(app)
 const PORT = process.env.PORT || 3001;
-const corsOptions = {
-    origin:'https://isacitra.com'
-}
+const SERVER_PORT = process.env.HTTP_PORT || 8000;
+
+
 const sessionConfig = {
   secret: 'sipalingambisius',
   resave:false,
@@ -84,15 +44,15 @@ const sessionConfig = {
     maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true
   }
-  
 }
 
-const resetAll = async () => {
-  await User.deleteMany({})
-}
+const io = socketIo(server, {
+  cors: {
+
+  }
+})
+
 app.use(cors());
-//app.use(allowCors(handler));
-//app.use(allowCors2);
 app.use(express.json());
 app.use(session(sessionConfig));
 app.use(flash());
@@ -137,18 +97,20 @@ app.get('/fakeUser', asyncWrapper(async(req,res)=>{
   res.send(newUser)
 }))
 
-
-
-
-
-
 app.get('/', asyncWrapper(async (req,res)=> {
   const topPicks = await BlogPost.aggregate([
     { $sample: { size: 3 } },
   ]);
     res.send({topPicks})
 }))
+server.listen(SERVER_PORT, () => {
+  console.log(`Server HTTP berjalan di port ${SERVER_PORT}`);
+})
 
 app.listen(PORT, () => {
     console.log('backend berjalan di port 3000')
 })
+
+export {
+  io
+}
