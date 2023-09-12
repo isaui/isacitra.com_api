@@ -30,10 +30,12 @@ db.once("open", ()=>{
     console.log('Mongo database connected')
 } )
 const app = express();
-const server = http.createServer(app)
+
 const PORT = process.env.PORT || 3001;
 const SERVER_PORT = process.env.HTTP_PORT || 8000;
-
+const server = app.listen(PORT, () => {
+  console.log('backend berjalan di port 3000')
+})
 
 const sessionConfig = {
   secret: 'sipalingambisius',
@@ -51,6 +53,9 @@ const io = new Server(server, {
     origin: '*'
   }
 })
+io.on('connection', function(socket){   
+  console.log('A connection is made'); 
+});
 
 app.use(cors());
 app.use(express.json());
@@ -103,13 +108,8 @@ app.get('/', asyncWrapper(async (req,res)=> {
   ]);
     res.send({topPicks})
 }))
-server.listen(SERVER_PORT, () => {
-  console.log(`Server HTTP berjalan di port ${SERVER_PORT}`);
-})
 
-app.listen(PORT, () => {
-    console.log('backend berjalan di port 3000')
-})
+
 
 export {
   io
