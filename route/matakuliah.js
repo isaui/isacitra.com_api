@@ -51,7 +51,7 @@ router.post('/edit/:id', asyncWrapper(async (req,res)=>{
       return res.status(400).json({message:"Mata Kuliah Tidak Ada atau Telah Dihapus"})
   }
   // todo: perbarui data matkul dengan matkuldata
-  channel.publish('update-matkul', matkul)
+  await channel.publish('update-matkul', matkul)
   return res.json(matkul);
   } catch (error) {
       return res.status(500).json({error:error, message:error.message??"Terjadi kesalahan dalam server"})
