@@ -8,12 +8,13 @@ import ArticleRoute from './route/article.js';
 import AuthenticationRoute from './route/authentication.js';
 import session from 'express-session';
 import flash from 'connect-flash';
-import {Server} from 'socket.io';
+//import {Server} from 'socket.io';
 import http from 'http';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import {MataKuliah, Chapter} from './models/Material.js';
 import MataKuliahRoute from './route/matakuliah.js';
+import Ably from 'ably';
 
 const url = "mongodb://localhost:27017/isacitraweb"
 const atlasUrl = "mongodb+srv://isacitra:ENLkYSN2evCAab5D@isacitraweb.batvch9.mongodb.net/?retryWrites=true&w=majority";
@@ -32,7 +33,7 @@ db.once("open", ()=>{
 const app = express();
 
 const PORT = process.env.PORT || 3001;
-const SERVER_PORT = process.env.HTTP_PORT || 8000;
+//const SERVER_PORT = process.env.HTTP_PORT || 8000;
 const server = app.listen(PORT, () => {
   console.log('backend berjalan di port 3000')
 })
@@ -48,14 +49,10 @@ const sessionConfig = {
   }
 }
 
-const io = new Server(server, {
-  cors: {
-    origin: '*'
-  }
+const ably = new Ably.Realtime({
+  key: 'o7gv-w.Dqaqog:JwEtvGNYUx_PbFo3FNzTMaFdvitLhzTI6UlPSI-GWuA'
 })
-io.on('connection', function(socket){   
-  console.log('A connection is made'); 
-});
+const channel = ably.channels.get('update-matkul-channel')
 
 app.use(cors());
 app.use(express.json());
@@ -112,5 +109,5 @@ app.get('/', asyncWrapper(async (req,res)=> {
 
 
 export {
-  io
+  channel
 }
