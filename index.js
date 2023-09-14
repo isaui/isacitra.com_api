@@ -50,7 +50,7 @@ const sessionConfig = {
 }
 
 const ably = new Ably.Realtime({
-  key: 'o7gv-w.Dqaqog:JwEtvGNYUx_PbFo3FNzTMaFdvitLhzTI6UlPSI-GWuA'
+  key: 'o7gv-w.ulW0zw:olcD9FroY5pv3a9EhFzb4X7Hth-nedgovu4bdz8bsFI'
 })
 const channel = ably.channels.get('update-matkul-channel')
 
