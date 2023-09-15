@@ -62,7 +62,7 @@ router.post('/edit/:id', asyncWrapper(async (req,res)=>{
 router.post('/addNotes', asyncWrapper(async (req,res)=>{
   
   const {idMatkul, idChapter, idMateri,  dataMateri } = req.body;
-  console.log(req.body)
+  console.log("id matkul lo-> ", idMatkul)
   try {
       const matkul = await  MataKuliah.findById(idMatkul).populate('author').populate('chapters').populate({
         path: 'chapters.materi.notes.author',
