@@ -76,6 +76,82 @@ router.post('/addNotes', asyncWrapper(async (req,res)=>{
   }
 }))
 
+// delete note
+router.post('/deleteNote', asyncWrapper(async (req,res)=>{
+  
+  const {idMatkul, idChapter, idMateri,  idNote } = req.body;
+  try {
+      const matkul = await  MataKuliah.findById(idMatkul).populate('author').populate('chapters').populate({
+        path: 'chapters.materi.notes.author',
+        model: 'User' // Ganti 'User' dengan nama model yang sesuai
+    }).populate({
+      path: 'chapters.materi.videos.author',
+      model: 'User' // Ganti 'User' dengan nama model yang sesuai
+  });
+
+  if(!matkul){
+      return res.status(400).json({message:"Mata Kuliah Tidak Ada atau Telah Dihapus"})
+  }
+  
+  const chapter = matkul.chapters.find((ch) => ch._id == idChapter);
+  if(chapter){
+    const materi = chapter.materi.find((mt) => mt._id == idMateri)
+    if(materi){
+      materi.notes = materi.notes.filter(nt => nt._id != idNote)
+    }
+    
+  }
+  await matkul.save()
+  channel.publish('update-matkul', matkul)
+  return res.json(matkul);
+  } catch (error) {
+      console.log(error)
+      return res.status(500).json({error:error, message:error.message??"Terjadi kesalahan dalam server"})
+  }
+}))
+
+
+// edit note
+router.post('/editNote', asyncWrapper(async (req,res)=>{
+  
+  const {idMatkul, idChapter, idMateri, idNote ,dataMateri } = req.body;
+  try {
+      const matkul = await  MataKuliah.findById(idMatkul).populate('author').populate('chapters').populate({
+        path: 'chapters.materi.notes.author',
+        model: 'User' // Ganti 'User' dengan nama model yang sesuai
+    }).populate({
+      path: 'chapters.materi.videos.author',
+      model: 'User' // Ganti 'User' dengan nama model yang sesuai
+  });
+
+  if(!matkul){
+      return res.status(400).json({message:"Mata Kuliah Tidak Ada atau Telah Dihapus"})
+  }
+  
+  const chapter = matkul.chapters.find((ch) => ch._id == idChapter);
+  if(chapter){
+    const materi = chapter.materi.find((mt) => mt._id == idMateri)
+    if(materi){
+      const note = materi.notes.find(nt => nt._id == idNote)
+      if(note){
+      note.title = dataMateri.title;
+      note.thumbnail = dataMateri.thumbnail;
+      note.content = dataMateri.content;
+      note.categories = note.categories;
+      note.lastModified = Date.now
+      }
+    }
+    
+  }
+  await matkul.save()
+  channel.publish('update-matkul', matkul)
+  return res.json(matkul);
+  } catch (error) {
+      console.log(error)
+      return res.status(500).json({error:error, message:error.message??"Terjadi kesalahan dalam server"})
+  }
+}))
+
 // Menambahkan Video
 router.post('/addVideo', asyncWrapper(async (req,res)=>{
   
@@ -193,6 +269,7 @@ router.post('/deleteSection', asyncWrapper(async (req,res)=>{
       return res.status(500).json({error:error, message:error.message??"Terjadi kesalahan dalam server"})
   }
 }))
+
 
 // add materi
 router.post('/addMateri', asyncWrapper(async (req,res)=>{
