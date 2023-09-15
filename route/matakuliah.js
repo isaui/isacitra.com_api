@@ -59,11 +59,12 @@ router.post('/edit/:id', asyncWrapper(async (req,res)=>{
 }))
 
 // Menambahkan Notes
-router.post('/addNotes/:id', asyncWrapper(async (req,res)=>{
-  const {id} = req.params;
-  const {idMatkul, idChapter, dataMateri } = req.body;
+router.post('/addNotes', asyncWrapper(async (req,res)=>{
+  
+  const {idMatkul, idChapter, idMateri,  dataMateri } = req.body;
+  console.log(req.body)
   try {
-      const matkul = await  MataKuliah.findById(id).populate('author').populate('chapters').populate({
+      const matkul = await  MataKuliah.findById(idMatkul).populate('author').populate('chapters').populate({
         path: 'chapters.materi.notes.author',
         model: 'User' // Ganti 'User' dengan nama model yang sesuai
     }).populate({
@@ -74,14 +75,20 @@ router.post('/addNotes/:id', asyncWrapper(async (req,res)=>{
   if(!matkul){
       return res.status(400).json({message:"Mata Kuliah Tidak Ada atau Telah Dihapus"})
   }
+  
   const chapter = matkul.chapters.find((ch) => ch._id == idChapter);
   if(chapter){
-    chapter.notes.push(dataMateri)
+    const materi = chapter.materi.find((mt) => mt._id == idMateri)
+    if(materi){
+      materi.notes.push(dataMateri)
+    }
+    
   }
-  await matkul.save();
+  await matkul.save()
   channel.publish('update-matkul', matkul)
   return res.json(matkul);
   } catch (error) {
+      console.log(error)
       return res.status(500).json({error:error, message:error.message??"Terjadi kesalahan dalam server"})
   }
 }))
