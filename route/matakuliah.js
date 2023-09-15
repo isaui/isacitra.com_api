@@ -76,10 +76,46 @@ router.post('/addNotes', asyncWrapper(async (req,res)=>{
   }
 }))
 
+// Menambahkan Video
+router.post('/addVideo', asyncWrapper(async (req,res)=>{
+  
+  const {idMatkul, idChapter, idMateri,  dataMateri } = req.body;
+  try {
+      const matkul = await  MataKuliah.findById(idMatkul).populate('author').populate('chapters').populate({
+        path: 'chapters.materi.notes.author',
+        model: 'User' // Ganti 'User' dengan nama model yang sesuai
+    }).populate({
+      path: 'chapters.materi.videos.author',
+      model: 'User' // Ganti 'User' dengan nama model yang sesuai
+  });
+
+  if(!matkul){
+      return res.status(400).json({message:"Mata Kuliah Tidak Ada atau Telah Dihapus"})
+  }
+  
+  const chapter = matkul.chapters.find((ch) => ch._id == idChapter);
+  if(chapter){
+    const materi = chapter.materi.find((mt) => mt._id == idMateri)
+    if(materi){
+      materi.videos.push(dataMateri)
+    }
+    
+  }
+  await matkul.save()
+  channel.publish('update-matkul', matkul)
+  return res.json(matkul);
+  } catch (error) {
+      console.log(error)
+      return res.status(500).json({error:error, message:error.message??"Terjadi kesalahan dalam server"})
+  }
+}))
+
+
 // menambah section atau chapter
 router.post('/addSection', asyncWrapper(async (req,res)=>{
   
   const {idMatkul, dataChapter } = req.body;
+
   try {
       const matkul = await  MataKuliah.findById(idMatkul).populate('author').populate('chapters').populate({
         path: 'chapters.materi.notes.author',
