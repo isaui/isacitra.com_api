@@ -138,7 +138,7 @@ router.post('/editNote', asyncWrapper(async (req,res)=>{
       note.thumbnail = dataMateri.thumbnail;
       note.content = dataMateri.content;
       note.categories = note.categories;
-      note.lastModified = Date.now
+      note.lastModified = Date.now()
       }
     }
     
