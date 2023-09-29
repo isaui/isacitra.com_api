@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import {User} from './models/User.js';
+import {User, Guest} from './models/User.js';
+import { Room } from './models/Room.js';
 import cors from 'cors';
 import BlogPost from './models/Post.js';
 import asyncWrapper from './utils/async-wrapper.js';
@@ -14,7 +15,9 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import {MataKuliah, Chapter} from './models/Material.js';
 import MataKuliahRoute from './route/matakuliah.js';
+import VideoRoute from './route/video-conference.js';
 import Ably from 'ably';
+import { CronJob } from 'cron';
 
 const url = "mongodb://localhost:27017/isacitraweb"
 const atlasUrl = "mongodb+srv://isacitra:ENLkYSN2evCAab5D@isacitraweb.batvch9.mongodb.net/?retryWrites=true&w=majority";
@@ -53,6 +56,7 @@ const ably = new Ably.Realtime({
   key: 'o7gv-w.ulW0zw:olcD9FroY5pv3a9EhFzb4X7Hth-nedgovu4bdz8bsFI'
 })
 const channel = ably.channels.get('update-matkul-channel')
+const roomChannel = ably.channels.get('room-channel')
 
 app.use(cors());
 app.use(express.json());
@@ -76,9 +80,50 @@ app.use((req, res, next) => {
 
 app.use('/authentication', AuthenticationRoute);
 app.use('/articles', ArticleRoute);
-app.use('/learn', MataKuliahRoute)
+app.use('/learn', MataKuliahRoute);
+app.use('/video', VideoRoute)
 
 
+const deleteExpiredRooms = async () => {
+  try {
+    const currentDate = new Date();
+    // Gantilah kondisi ini dengan kondisi yang sesuai dengan aturan Anda
+    const expiredRooms = await Room.find({ endTime: { $lt: currentDate } });
+
+    if (expiredRooms.length > 0) {
+      // Hapus semua room yang sudah kadaluwarsa
+      await Room.deleteMany({ _id: { $in: expiredRooms.map(room => room._id) } });
+      console.log(`Menghapus ${expiredRooms.length} room yang sudah kadaluwarsa.`);
+    }
+  } catch (error) {
+    console.error('Terjadi kesalahan saat menghapus room yang kadaluwarsa:', error);
+  }
+};
+
+async function updateRoomStatus() {
+  try {
+    const currentTime = new Date();
+    const roomsToActivate = await Room.find({
+      status: 'scheduled',
+      scheduledTime: { $lte: currentTime }, // Filter ruangan dengan scheduledTime <= waktu saat ini
+    });
+
+    for (const room of roomsToActivate) {
+      room.status = 'actived';
+      await room.save();
+      console.log(`Room "${room.title}" telah diubah statusnya menjadi "actived".`);
+    }
+  } catch (error) {
+    console.error('Terjadi kesalahan:', error);
+  }
+}
+const updateRoomJob = new  CronJob('* * * * *', updateRoomStatus);
+const job = new CronJob('0 2 * * *', async () => {
+  // Kode untuk menghapus room yang telah berakhir di sini
+  deleteExpiredRooms()
+}, null, true, 'Asia/Jakarta');
+updateRoomJob.start()
+job.start()
 
 app.get('/fakeUser', asyncWrapper(async(req,res)=>{
   const fakeUser = {
@@ -109,5 +154,6 @@ app.get('/', asyncWrapper(async (req,res)=> {
 
 
 export {
-  channel
+  channel,
+  roomChannel
 }
