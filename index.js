@@ -7,7 +7,7 @@ import BlogPost from './models/Post.js';
 import asyncWrapper from './utils/async-wrapper.js';
 import ArticleRoute from './route/article.js';
 import AuthenticationRoute from './route/authentication.js';
-import session from 'express-session';
+import session from 'cookie-session';
 import flash from 'connect-flash';
 //import {Server} from 'socket.io';
 import http from 'http';
