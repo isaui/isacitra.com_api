@@ -115,6 +115,7 @@ router.post('/', asyncWrapper(async (req, res) => {
         post = await BlogPost.findById(id).populate('author');
         post.incrementViews();
       } catch (error) {
+        console.log(error)
         next(error)
         return;
       }
