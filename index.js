@@ -7,7 +7,7 @@ import BlogPost from './models/Post.js';
 import asyncWrapper from './utils/async-wrapper.js';
 import ArticleRoute from './route/article.js';
 import AuthenticationRoute from './route/authentication.js';
-import session from 'cookie-session';
+import session from 'express-session';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import MataKuliahRoute from './route/matakuliah.js';

@@ -11,6 +11,9 @@ const {RtcTokenBuilder, RtmTokenBuilder, RtcRole, RtmRole} = AgoraToken
 import mongoose from 'mongoose';
 const ROOM_SECRET_KEY = 'SoloLordPakaiEstes';
 
+
+
+
 const generateRtcTokenForRoom = (participantId, roomId) => {
   // Rtc Examples
   const appId = 'd91d04d113ba4e6181f6da7f4cb9a1cc';
@@ -143,6 +146,7 @@ router.post('/createRoom', async (req, res) => {
         status,
         endTime,
         _id:roomId,
+        chats:[]
       });
   
       // Simpan ruangan ke dalam database

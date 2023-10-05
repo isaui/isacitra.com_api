@@ -1,4 +1,25 @@
 import mongoose from "mongoose";
+
+const chatSchema = new mongoose.Schema({
+  sender:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Guest'
+  },
+  message:{
+    type:String,
+    default: ''
+  },
+  receiver:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Guest'
+  },
+  createdAt:{
+    type: Date,
+    default: Date.now
+  }
+
+})
+
 const roomSchema = new mongoose.Schema({
     title: {
       type: String,
@@ -17,6 +38,10 @@ const roomSchema = new mongoose.Schema({
       required: true,
     },
     endTime: Date,
+    chats: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Chat'
+    }],
     participants: {
       type: Map,
       of: {
@@ -66,7 +91,7 @@ const roomSchema = new mongoose.Schema({
           },
         },
       },
-    status: {
+    status: { 
       type: String,
       enum: ['scheduled', 'actived', 'ended'],
       default: 'scheduled',
@@ -74,5 +99,5 @@ const roomSchema = new mongoose.Schema({
   });
   
   const Room = mongoose.model('Room', roomSchema);
-
-  export {Room}
+  const Chat = mongoose.model('Chat', chatSchema);
+  export {Room, Chat}
