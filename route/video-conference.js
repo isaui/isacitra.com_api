@@ -218,11 +218,14 @@ router.post('/removeFromRoom', async (req, res) => {
 
   
         await selectedRoom.save();
+        const roomToPublish = await Room.findById(selectedRoom._id).populate('participants.userId participants.guestId')
+        .populate('host.userId host.guestId')
+        .populate('coHosts.userId coHosts.guestId');
+
   
         // Mengirim pembaruan ruangan melalui channel yang sesuai
-        roomChannel.publish('update-room', { "roomId": selectedRoom._id, "room": selectedRoom });
-  
-        return res.json({ "roomId": selectedRoom._id, "room": selectedRoom });
+        roomChannel.publish('update-room', { "roomId": selectedRoom._id, "room": roomToPublish });
+        return res.json({ "roomId": selectedRoom._id, "room": roomToPublish });
       } else {
         return res.status(400).json({ 'message': 'Partisipan tidak ditemukan dalam room' });
       }
