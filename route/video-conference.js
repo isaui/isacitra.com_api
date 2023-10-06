@@ -78,7 +78,7 @@ router.post('/addToRoomViaToken', async(req,res)=>{
         await room.save();
         const selectedRoom = await Room.findById(roomId).populate('participants.$*.userId participants.$*.guestId')
         .populate('host.userId host.guestId')
-        .populate('coHosts.$*.userId coHosts.$*.guestId');
+        .populate('coHosts.$*.userId coHosts.$*.guestId').populate('chats');
         if(selectedRoom){
           roomChannel.publish('update-room', {"roomId": selectedRoom._id, "room":selectedRoom})
           return res.json({room: selectedRoom, rtcToken:generateRtcTokenForRoom(participantId,roomId), participant: participantData, token: createToken(selectedRoom._id, userId?null:guestId, userId?userId:null )})
@@ -110,7 +110,7 @@ router.post('/addToRoom', async (req,res)=>{
         const participantData = isUser? await User.findById(participantId) : await Guest.findById(participantId);
         const roomToPublish =  await Room.findById(roomId).populate('participants.$*.userId participants.$*.guestId')
         .populate('host.userId host.guestId')
-        .populate('coHosts.$*.userId coHosts.$*.guestId');
+        .populate('coHosts.$*.userId coHosts.$*.guestId').populate('chats');
         if(! roomToPublish){
           return res.status(404).json({'message':'Room sudah dihapus atau kadaluwarsa'})
       }
@@ -175,7 +175,8 @@ router.post('/addCommentToRoom', async (req,res)=>{
     await chat.save()
     room.chats.push(chat);
     await room.save();
-    const roomToPublish = await Room.findById(roomId).populate('participants.$*.userId participants.$*.guestId')
+    const roomToPublish = await Room.findById(roomId).populate('participants.$*.userId participants.$*.guestId').
+    populate('chats')
         .populate('host.userId host.guestId')
         .populate('coHosts.$*.userId coHosts.$*.guestId');
     roomChannel.publish('update-room', { "roomId": roomId, "room": roomToPublish });
@@ -248,7 +249,8 @@ router.post('/removeFromRoom', async (req, res) => {
 
   
         await selectedRoom.save();
-        const roomToPublish = await Room.findById(selectedRoom._id).populate('participants.$*.userId participants.$*.guestId')
+        const roomToPublish = await Room.findById(selectedRoom._id).
+        populate('participants.$*.userId participants.$*.guestId').populate('chats')
         .populate('host.userId host.guestId')
         .populate('coHosts.$*.userId coHosts.$*.guestId');
 
@@ -311,7 +313,7 @@ router.post('/guest', async (req, res) => {
     try {
       console.log("ada disini")
       const {id} = req.params;
-      const room = await Room.findById(id).populate('participants.$*.userId participants.$*.guestId')
+      const room = await Room.findById(id).populate('participants.$*.userId participants.$*.guestId').populate('chats')
       .populate('host.userId host.guestId')
       .populate('coHosts.$*.userId coHosts.$*.guestId');
       console.log("ini room", room)
