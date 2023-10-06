@@ -182,7 +182,7 @@ router.post('/addCommentToRoom', async (req,res)=>{
     return res.json({ "roomId": roomId, "room": roomToPublish });
 
   } catch (error) {
-    return res.status(500).json({'message': 'Terjadi kesalahan pada server'})
+    return res.status(500).json({'message': 'terjadi kesalahan dalam membuat room', 'error':error})
   }
 })
   
