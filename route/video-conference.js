@@ -2,7 +2,7 @@ import express from 'express';
 import asyncWrapper from '../utils/async-wrapper.js';
 const router = express.Router( );
 import { channel, roomChannel } from '../index.js';
-import { Room } from '../models/Room.js'; 
+import { Room, Chat } from '../models/Room.js'; 
 import { Guest, User } from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import AgoraToken from 'agora-token';
@@ -159,6 +159,32 @@ router.post('/createRoom', async (req, res) => {
       res.status(500).json({ message: 'Terjadi kesalahan pada server' });
     }
   });
+
+router.post('/addCommentToRoom', async (req,res)=>{
+  try {
+    const {roomId, senderId, receiverId, message} = req.body;
+    const room = await Room.findById(roomId);
+    if(!room){
+      return res.status(404).json({'message': 'Room tidak ditemukan'})
+    }
+    const chat = new Chat({
+      sender: senderId,
+      message: message,
+      receiver: receiverId
+    })
+    await chat.save()
+    room.chats.push(chat);
+    await room.save();
+    const roomToPublish = await Room.findById(roomId).populate('participants.$*.userId participants.$*.guestId')
+        .populate('host.userId host.guestId')
+        .populate('coHosts.$*.userId coHosts.$*.guestId');
+    roomChannel.publish('update-room', { "roomId": roomId, "room": roomToPublish });
+    return res.json({ "roomId": roomId, "room": roomToPublish });
+
+  } catch (error) {
+    return res.status(500).json({'message': 'Terjadi kesalahan pada server'})
+  }
+})
   
 
 router.post('/removeFromRoom', async (req, res) => {
