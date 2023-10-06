@@ -170,7 +170,7 @@ router.post('/addCommentToRoom', async (req,res)=>{
     const chat = new Chat({
       sender: senderId,
       message: message,
-      receiver: receiverId
+      receiver: receiverId == 'all'? null : receiverId
     })
     await chat.save()
     room.chats.push(chat);
