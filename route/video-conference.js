@@ -54,6 +54,22 @@ function createToken(roomId, guestId, userId) {
   return token;
 }
 
+function createScreenToken(roomId, guestId, userId) {
+  const payload = {
+    roomId: roomId,
+    userId:userId,
+    guestId: guestId+'-screenshare',
+    // Anda juga dapat menambahkan informasi lain ke dalam payload jika diperlukan
+  };
+
+  // Anda dapat mengganti 'rahasiaKunci' dengan kunci rahasia yang lebih aman
+  const token = jwt.sign(payload, ROOM_SECRET_KEY, {
+    expiresIn: '45m', // Token akan kedaluwarsa dalam 15 menit
+  });
+
+  return token;
+}
+
 router.post('/addToRoomViaToken', async(req,res)=>{
   const {token} = req.body
   if(token){
@@ -81,7 +97,7 @@ router.post('/addToRoomViaToken', async(req,res)=>{
         .populate('coHosts.$*.userId coHosts.$*.guestId').populate('chats');
         if(selectedRoom){
           roomChannel.publish('update-room', {"roomId": selectedRoom._id, "room":selectedRoom})
-          return res.json({room: selectedRoom, rtcToken:generateRtcTokenForRoom(participantId,roomId), participant: participantData, token: createToken(selectedRoom._id, userId?null:guestId, userId?userId:null )})
+          return res.json({room: selectedRoom, screenRtcToken:generateRtcTokenForRoom(participantId+'-screenshare', roomId),rtcToken:generateRtcTokenForRoom(participantId,roomId), participant: participantData, token: createToken(selectedRoom._id, userId?null:guestId, userId?userId:null )})
         }
       }
       return res.status(404).json({message: 'Room tidak ada atau sudah dihapus'})
@@ -115,7 +131,7 @@ router.post('/addToRoom', async (req,res)=>{
           return res.status(404).json({'message':'Room sudah dihapus atau kadaluwarsa'})
       }
         roomChannel.publish('update-room', {"roomId": roomToPublish._id, "room":roomToPublish})
-        return res.json({"roomId":roomToPublish._id,"rtcToken":generateRtcTokenForRoom(participantId,roomId), "room":roomToPublish,participant:participantData, token: createToken(roomToPublish._id, isUser? null: participantId, isUser? participantId:null)})
+        return res.json({"roomId":roomToPublish._id,screenRtcToken:generateRtcTokenForRoom(participantId+'-screenshare', roomId),"rtcToken":generateRtcTokenForRoom(participantId,roomId), "room":roomToPublish,participant:participantData, token: createToken(roomToPublish._id, isUser? null: participantId, isUser? participantId:null)})
     } catch (error) {
         return res.status(500).json({'message':'Terjadi kesalahan pada server'})
     }
