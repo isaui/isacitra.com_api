@@ -137,6 +137,31 @@ router.post('/addToRoom', async (req,res)=>{
     }
   });
 
+  router.post('/reaction', async (req,res)=>{
+    try {
+      const {reaction, roomId, guestId} = req.body;
+      const room = await Room.findById(roomId);
+      if(!room){
+        return res.status(404).json({'message': 'Room tidak ditemukan'});
+      }
+      const participant = room.participants[guestId];
+      if(!participant){
+        return res.status(404).json({'message': 'Partisipan tidak ditemukan'});
+      }
+      participant.reaction = reaction;
+      await room.save();
+      const roomToPublish = await Room.findById(roomId).populate('participants.$*.userId participants.$*.guestId').
+      populate('chats')
+          .populate('host.userId host.guestId')
+          .populate('coHosts.$*.userId coHosts.$*.guestId');
+      roomChannel.publish('update-room', { "roomId": roomId, "room": roomToPublish });
+      return res.json({ "roomId": roomId, "room": roomToPublish });
+
+    } catch (error) {
+      return res.status(500).json({'message': 'terjadi kesalahan dalam membuat room', 'error':error})
+    }
+  })
+
 
 // Endpoint untuk membuat ruangan baru
 router.post('/createRoom', async (req, res) => {

@@ -53,6 +53,10 @@ const roomSchema = new mongoose.Schema({
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Guest', // Gantilah 'Guest' dengan model pengguna tamu Anda
         },
+        reaction: {
+          type:String,
+          default:'no-reaction'
+        },
         peerId:{
           type:String
         }
