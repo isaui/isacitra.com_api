@@ -146,7 +146,7 @@ router.post('/addToRoom', async (req,res)=>{
       }
       const participant = room.participants[guestId];
       if(!participant){
-        return res.status(404).json({'participantId':guestId,'participant':participant,'message': 'Partisipan tidak ditemukan'});
+        return res.status(404).json({'room':room,'participantId':guestId,'participant':participant,'message': 'Partisipan tidak ditemukan'});
       }
       participant.reaction = participant.reaction == reaction ? 'no-reaction': reaction;
       await room.save();
