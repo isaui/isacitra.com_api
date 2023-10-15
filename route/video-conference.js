@@ -144,7 +144,7 @@ router.post('/addToRoom', async (req,res)=>{
       if(!room){
         return res.status(404).json({'message': 'Room tidak ditemukan'});
       }
-      const participant = room.participants[guestId];
+      const participant = room.participants.get(guestId);
       if(!participant){
         return res.status(404).json({'room':room,'participantId':guestId,'participant':participant,'message': 'Partisipan tidak ditemukan'});
       }
