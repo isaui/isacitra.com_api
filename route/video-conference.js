@@ -148,7 +148,7 @@ router.post('/addToRoom', async (req,res)=>{
       if(!participant){
         return res.status(404).json({'message': 'Partisipan tidak ditemukan'});
       }
-      participant.reaction = reaction;
+      participant.reaction = participant.reaction == reaction ? 'no-reaction': reaction;
       await room.save();
       const roomToPublish = await Room.findById(roomId).populate('participants.$*.userId participants.$*.guestId').
       populate('chats')
