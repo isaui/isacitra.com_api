@@ -365,7 +365,7 @@ router.post('/guest', async (req, res) => {
       return res.json({room: room, id: room._id})
     } catch (error) {
       console.log(error)
-      return res.status(500).json({'message':'Terdapat kesalahan di sisi internal server'})
+      return res.status(404).json({'message':'Room tidak ditemukan'})
     }
   })
 
