@@ -7,6 +7,7 @@ import BlogPost from './models/Post.js';
 import asyncWrapper from './utils/async-wrapper.js';
 import ArticleRoute from './route/article.js';
 import AuthenticationRoute from './route/authentication.js';
+import PostgresRoute from './route/db.js'
 import session from 'express-session';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
@@ -74,7 +75,8 @@ app.use((req, res, next) => {
 app.use('/authentication', AuthenticationRoute);
 app.use('/articles', ArticleRoute);
 app.use('/learn', MataKuliahRoute);
-app.use('/video', VideoRoute)
+app.use('/video', VideoRoute);
+app.use('/postgres', PostgresRoute);
 
 
 const deleteExpiredRooms = async () => {
