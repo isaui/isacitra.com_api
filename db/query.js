@@ -1,4 +1,4 @@
-import pool from "./pool"
+import pool from "./pool.js"
 
 const query = async (queryString) => {
    const client =  await pool.connect();

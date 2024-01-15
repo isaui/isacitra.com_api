@@ -1,5 +1,5 @@
 import express from 'express';
-import query from '../db/query'
+import query from '../db/query.js';
 const router = express.Router();
 
 router.post('/', asyncWrapper(async (req, res) => {
