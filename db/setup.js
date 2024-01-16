@@ -58,8 +58,8 @@ CREATE TABLE BOOKING_DEMO(
 CREATE OR REPLACE FUNCTION addBookingDemo() RETURNS TRIGGER AS
 $$
 BEGIN
-IF(EXISTS(SELECT 1 FROM BOOKING_DEMO WHERE BOOKING_DEMO.demoSessionId = NEW.demoSessionId AND BOOKING_DEMO.status != 'active'))
-THEN RAISE NOTICE 'Data dengan demoSessionId % dan status != ''active'' sudah ada, penyisipan dibatalkan.', NEW.demoSessionId;
+IF(EXISTS(SELECT 1 FROM BOOKING_DEMO WHERE BOOKING_DEMO.demoSessionId = NEW.demoSessionId AND BOOKING_DEMO.status = 'active'))
+THEN RAISE NOTICE 'Data dengan demoSessionId % dan status = ''active'' sudah ada, penyisipan dibatalkan.', NEW.demoSessionId;
 ELSE
 RETURN NEW; 
 END IF;
@@ -71,11 +71,51 @@ BEFORE INSERT ON BOOKING_DEMO
 FOR EACH ROW
 EXECUTE FUNCTION addBookingDemo();
 `
+const str3 = `
+CREATE OR REPLACE FUNCTION addBookingDemo() RETURNS TRIGGER AS
+$$
+BEGIN
+IF(EXISTS(SELECT 1 FROM BOOKING_DEMO WHERE BOOKING_DEMO.demoSessionId = NEW.demoSessionId AND BOOKING_DEMO.status = 'active'))
+THEN RAISE EXCEPTION 'Data dengan demoSessionId % dan status = ''active'' sudah ada, penyisipan dibatalkan.', NEW.demoSessionId;
+RETURN NULL;
+ELSE
+RETURN NEW; 
+END IF;
+END;
+$$ LANGUAGE plpgsql;
+`
+
+const str4 = `
+ALTER TABLE BOOKING_DEMO
+ADD COLUMN email VARCHAR(50);
+`
+
+const str2 = `
+CREATE TABLE DEMO_SESSION(
+    demoSessionDateId UUID NOT NULL,
+    demoSessionId UUID NOT NULL,
+    startTime TIMESTAMP NOT NULL,
+    endTime TIMESTAMP NOT NULL,
+    PRIMARY KEY(demoSessionId),
+    FOREIGN KEY(demoSessionDateId) REFERENCES DEMO_SESSIONS_DATE(demoSessionDateId) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE BOOKING_DEMO(
+    bookingDemoId UUID NOT NULL,
+    demoSessionId UUID NOT NULL,
+    nomorMahasiswa VARCHAR(30) NOT NULL,
+    status VARCHAR(20) NOT NULL, 
+    PRIMARY KEY(BookingDemoId),
+    FOREIGN KEY(demoSessionId) REFERENCES DEMO_SESSION(demoSessionId) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+`
 
 const doSomething = async () => {
     try {
         console.log('BADUT')
-        await query(str);
+        const res = await query(str4);
+        console.log(res)
         console.log('Skrip berhasil dijalankan.');
     } catch (error) {
         console.error('Terjadi kesalahan:', error);

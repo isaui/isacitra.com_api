@@ -11,7 +11,7 @@ router.post('/', asyncWrapper(async (req, res) => {
         res.json({ message: 'Berhasil mengquery', result: queryResult });
     } catch (error) {
       console.error('Error:', error);
-      res.status(500).json({ message: 'Terjadi kesalahan server' });
+      res.status(500).json({ message: error.toString() });
     }
   }));
 export default router
