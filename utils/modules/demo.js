@@ -2,7 +2,7 @@ function formatISO8601ToHHMM(iso8601DateTime) {
     const isoStringWithUTC = iso8601DateTime;
 
     const dateObj = new Date(isoStringWithUTC);
-    dateObj.setUTCHours(dateObj.getUTCHours() + 14);
+    dateObj.setUTCHours(dateObj.getUTCHours() + 7);
     const hours = String(dateObj.getUTCHours()).padStart(2, '0');
     const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
     const formattedTime = `${hours}:${minutes}`;
