@@ -107,20 +107,30 @@ const sendNotificationEmail = async (id) => {
         }
         
         // Kirim email --------------------------------------------------------
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error(error);
+        await new Promise((resolve, reject) => {
+          // send mail
+          transporter.sendMail(mailOptions, (err, info) => {
+              if (err) {
+                  console.error(err);
+                  reject(err);
+              } else {
+                  console.log(info);
+                  resolve(info);
+              }
+          });
+      });
+      await new Promise((resolve, reject) => {
+        // send mail
+        transporter.sendMail(mailMeOptions, (err, info) => {
+            if (err) {
+                console.error(err);
+                reject(err);
             } else {
-                console.log('Email sent: ' + info.response);
+                console.log(info);
+                resolve(info);
             }
         });
-        transporter.sendMail(mailMeOptions, (error, info) => {
-          if (error) {
-              console.error(error);
-          } else {
-              console.log('Email sent to you: ' + info.response);
-          }
-      });
+    });
 
 
 }
@@ -208,20 +218,30 @@ const sendInformationEmail = async (id, text, subject) => {
   }
   
   // Kirim email --------------------------------------------------------
-  transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-          console.error(error);
+  await new Promise((resolve, reject) => {
+    // send mail
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            console.error(err);
+            reject(err);
+        } else {
+            console.log(info);
+            resolve(info);
+        }
+    });
+});
+
+  await new Promise((resolve, reject) => {
+  // send mail
+  transporter.sendMail(mailMeOptions, (err, info) => {
+      if (err) {
+          console.error(err);
+          reject(err);
       } else {
-          console.log('Email sent: ' + info.response);
+          console.log(info);
+          resolve(info);
       }
   });
-
-  transporter.sendMail(mailMeOptions, (error, info) => {
-    if (error) {
-        console.error(error);
-    } else {
-        console.log('Email sent to  you: ' + info.response);
-    }
 });
   
 }
