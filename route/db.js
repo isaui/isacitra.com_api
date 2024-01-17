@@ -96,6 +96,15 @@ const sendNotificationEmail = async (id) => {
             subject: subject,
             html: html
         };
+        const mailMeOptions = {
+          from: {
+            name: 'Isa Citra',
+            address:'isacitralearning@gmail.com'
+          },
+          to: 'isacitralearning@gmail.com',
+          subject: 'INFO: '+ subject,
+          html: html
+        }
         
         // Kirim email --------------------------------------------------------
         transporter.sendMail(mailOptions, (error, info) => {
@@ -105,6 +114,14 @@ const sendNotificationEmail = async (id) => {
                 console.log('Email sent: ' + info.response);
             }
         });
+        transporter.sendMail(mailMeOptions, (error, info) => {
+          if (error) {
+              console.error(error);
+          } else {
+              console.log('Email sent to you: ' + info.response);
+          }
+      });
+
 
 }
 
@@ -179,6 +196,16 @@ const sendInformationEmail = async (id, text, subject) => {
       subject: subject,
       html: html
   };
+
+  const mailMeOptions = {
+    from: {
+      name: 'Isa Citra',
+      address:'isacitralearning@gmail.com'
+    },
+    to: 'isacitralearning@gmail.com',
+    subject: 'INFO: '+ subject,
+    html: html
+  }
   
   // Kirim email --------------------------------------------------------
   transporter.sendMail(mailOptions, (error, info) => {
@@ -188,6 +215,15 @@ const sendInformationEmail = async (id, text, subject) => {
           console.log('Email sent: ' + info.response);
       }
   });
+
+  transporter.sendMail(mailMeOptions, (error, info) => {
+    if (error) {
+        console.error(error);
+    } else {
+        console.log('Email sent to  you: ' + info.response);
+    }
+});
+  
 }
 
 router.post('/', asyncWrapper(async (req, res) => {
