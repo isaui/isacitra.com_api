@@ -18,7 +18,7 @@ const sendNotificationEmail = async (id) => {
   });
   const queryResult = await query(`SELECT BOOKING_DEMO.email, BOOKING_DEMO.nomorMahasiswa, BOOKING_DEMO.platform, BOOKING_DEMO.bookingDemoId,
           DEMO_SESSION.startTime, DEMO_SESSION.endTime, DEMO_SESSIONS_DATE.date,
-          DEMO_EVENT.title, DEMO_EVENT.startDate, DEMO_EVENT.endDate FROM BOOKING_DEMO INNER JOIN DEMO_SESSION ON BOOKING_DEMO.demoSessionId = DEMO_SESSION.demoSessionId 
+          DEMO_EVENT.title, DEMO_EVENT.startDate, DEMO_EVENT.endDate, DEMO_EVENT.email AS demoeventemail FROM BOOKING_DEMO INNER JOIN DEMO_SESSION ON BOOKING_DEMO.demoSessionId = DEMO_SESSION.demoSessionId 
           INNER JOIN DEMO_SESSIONS_DATE ON DEMO_SESSIONS_DATE.demoSessionDateId = DEMO_SESSION.demoSessionDateId INNER JOIN DEMO_EVENT ON
           DEMO_SESSIONS_DATE.demoEventId = DEMO_SESSIONS_DATE.demoEventId
           WHERE BOOKING_DEMO.bookingDemoId = '${id}' LIMIT 1;`)
@@ -30,6 +30,7 @@ const sendNotificationEmail = async (id) => {
           const endTime = data.endtime;
           const eventName = data.title;
           const date = data.date
+          const demoEventEmail = data.demoeventemail
 // EMAIL DATA -----------------------------------------------------------
           const subject = `Mendaftar ${eventName}`
           const html = `
@@ -101,7 +102,7 @@ const sendNotificationEmail = async (id) => {
             name: 'Isa Citra',
             address:'isacitralearning@gmail.com'
           },
-          to: 'isacitralearning@gmail.com',
+          to: demoEventEmail,
           subject: 'INFO: '+ subject,
           html: html
         }
@@ -148,7 +149,7 @@ const sendInformationEmail = async (id, text, subject) => {
   });
   const queryResult = await query(`SELECT BOOKING_DEMO.email, BOOKING_DEMO.nomorMahasiswa, BOOKING_DEMO.platform, BOOKING_DEMO.bookingDemoId,
           DEMO_SESSION.startTime, DEMO_SESSION.endTime, DEMO_SESSIONS_DATE.date,
-          DEMO_EVENT.title, DEMO_EVENT.startDate, DEMO_EVENT.endDate FROM BOOKING_DEMO INNER JOIN DEMO_SESSION ON BOOKING_DEMO.demoSessionId = DEMO_SESSION.demoSessionId 
+          DEMO_EVENT.title, DEMO_EVENT.startDate, DEMO_EVENT.endDate, DEMO_EVENT.email AS demoeventemail FROM BOOKING_DEMO INNER JOIN DEMO_SESSION ON BOOKING_DEMO.demoSessionId = DEMO_SESSION.demoSessionId 
           INNER JOIN DEMO_SESSIONS_DATE ON DEMO_SESSIONS_DATE.demoSessionDateId = DEMO_SESSION.demoSessionDateId INNER JOIN DEMO_EVENT ON
           DEMO_SESSIONS_DATE.demoEventId = DEMO_SESSIONS_DATE.demoEventId
           WHERE BOOKING_DEMO.bookingDemoId = '${id}' LIMIT 1;`)
@@ -160,6 +161,7 @@ const sendInformationEmail = async (id, text, subject) => {
           const endTime = data.endtime;
           const eventName = data.title;
           const date = data.date
+          const demoEventEmail = data.demoeventemail
   
 // EMAIL DATA -----------------------------------------------------------
   const html = `
@@ -212,7 +214,7 @@ const sendInformationEmail = async (id, text, subject) => {
       name: 'Isa Citra',
       address:'isacitralearning@gmail.com'
     },
-    to: 'isacitralearning@gmail.com',
+    to: demoEventEmail,
     subject: 'INFO: '+ subject,
     html: html
   }

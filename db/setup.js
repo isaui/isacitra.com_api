@@ -90,6 +90,14 @@ ALTER TABLE BOOKING_DEMO
 ADD COLUMN email VARCHAR(50);
 `
 
+const str5 = `
+ALTER TABLE DEMO_EVENT
+ADD COLUMN email VARCHAR(255) DEFAULT 'isacitralearning@gmail.com';
+ALTER TABLE BOOKING_DEMO
+ALTER COLUMN email SET DATA TYPE VARCHAR(255);
+`
+
+
 const str2 = `
 CREATE TABLE DEMO_SESSION(
     demoSessionDateId UUID NOT NULL,
@@ -114,7 +122,7 @@ CREATE TABLE BOOKING_DEMO(
 const doSomething = async () => {
     try {
         console.log('BADUT')
-        const res = await query(str4);
+        const res = await query(str5);
         console.log(res)
         console.log('Skrip berhasil dijalankan.');
     } catch (error) {
