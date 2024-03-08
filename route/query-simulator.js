@@ -4,15 +4,16 @@ import { querySimulator } from '../db/query.js';
 
 const router = express.Router();
 
-router.post('/', asyncWrapper(async (req,res)=>{
+router.post('/', async (req,res)=>{
     try {
         const data = req.body;
         const queryString = data['query'];
-        const res = await querySimulator(queryString);
-        res.send({'message':'SUCCESS', 'data': JSON.stringify(res.rows)})
+        const resultData = await querySimulator(queryString);
+        return res.json({'message':'SUCCESS', 'query_result': JSON.stringify(resultData.rows)})
     } catch (error) {
-        res.send({'message':'ERROR', 'data':error.message})
+        console.log(error)
+        return res.json({'message':'ERROR', 'query_result':error.message})
     }
-}) )
+})
 
 export default router
