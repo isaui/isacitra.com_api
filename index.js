@@ -13,6 +13,7 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import MataKuliahRoute from './route/matakuliah.js';
 import VideoRoute from './route/video-conference.js';
+import QuerySimulatorRoute from './route/query-simulator.js';
 import Ably from 'ably';
 import { CronJob } from 'cron';
 
@@ -77,6 +78,7 @@ app.use('/articles', ArticleRoute);
 app.use('/learn', MataKuliahRoute);
 app.use('/video', VideoRoute);
 app.use('/postgres', PostgresRoute);
+app.use('/querySimulator', QuerySimulatorRoute);
 
 
 const deleteExpiredRooms = async () => {
