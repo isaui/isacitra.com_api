@@ -1,7 +1,8 @@
 import express from 'express';
 import asyncWrapper from '../utils/async-wrapper.js';
 import { querySimulator } from '../db/query.js';
-const router = express.Router( );
+
+const router = express.Router();
 
 router.post('/', asyncWrapper(async (req,res)=>{
     try {

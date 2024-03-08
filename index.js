@@ -78,7 +78,7 @@ app.use('/articles', ArticleRoute);
 app.use('/learn', MataKuliahRoute);
 app.use('/video', VideoRoute);
 app.use('/postgres', PostgresRoute);
-app.use('/querySimulator', QuerySimulatorRoute);
+app.use('/query-simulator', QuerySimulatorRoute);
 
 
 const deleteExpiredRooms = async () => {

@@ -8,12 +8,11 @@ const pool = new Pool({
     port: 29766,
   });
 
-const querySimulatorPool = new Pool({
+export const querySimulatorPool = new Pool({
   user: 'postgres',
     host: 'roundhouse.proxy.rlwy.net',
     database: 'railway',
     password: 'HEvekUnLqicOFrCLhuOzSYrRfHAuKxGQ',
     port: 24902
 })
-export {querySimulatorPool}
 export default pool

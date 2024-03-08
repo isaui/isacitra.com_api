@@ -7,13 +7,12 @@ const query = async (queryString) => {
    return res
 }
 
-const querySimulator = async (queryString) => {
+export const querySimulator = async (queryString) => {
    const client =  await querySimulatorPool.connect();
    const res = await client.query(queryString);
    client.release()
    return res
 }
 
-export {querySimulator}
 
 export default query
