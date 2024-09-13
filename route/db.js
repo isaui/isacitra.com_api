@@ -32,7 +32,7 @@ const sendNotificationEmail = async (id) => {
           const date = data.date
           const demoEventEmail = data.demoeventemail
 // EMAIL DATA -----------------------------------------------------------
-          const subject = `Mendaftar ${eventName}`
+          const subject = `Mendaftar Demo`
           const html = `
           <!doctype html>
           <html>
@@ -54,7 +54,7 @@ const sendNotificationEmail = async (id) => {
             line-height: 1.5rem; 
             text-align: justify;
             ">
-            Sebelumnya, terimakasih telah mendaftar pada ${eventName}. Anda telah memilih untuk melakukan
+             Anda telah memilih untuk melakukan
             demo tersebut pada waktu ${formatISO8601ToHHMM(startTime)} - ${formatISO8601ToHHMM(endTime)} WIB pada tanggal ${formatDate(date)}.
             Apabila Anda berencana untuk mengubah jadwal Anda, silahkan kunjungi web dibawah:
             </p>
