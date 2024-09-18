@@ -185,7 +185,7 @@ const sendInformationEmail = async (id, text, subject) => {
             line-height: 1.5rem; 
             text-align: justify;
             ">Permisi ${npm}, 
-            ${eventName} dengan id ${id} yang dilaksanakan pada ${formatISO8601ToHHMM(startTime)} - ${formatISO8601ToHHMM(endTime)} WIB ${text}
+            demo yang dilaksanakan pada ${formatISO8601ToHHMM(startTime)} - ${formatISO8601ToHHMM(endTime)} WIB ${text}
             </p>
             <p style="margin-bottom: 0.5rem; 
             font-size: 1rem;
